@@ -1,0 +1,27 @@
+{
+  "name": "slangbot",
+  "version": "0.0.0",
+  "description": "slack bot for flace slang",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flace/slangbot.git"
+  },
+  "keywords": [
+    "slack",
+    "slang",
+    "flace",
+    "slangbot",
+    "flaceslang",
+    "slackbot"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flace/slangbot/issues"
+  },
+  "homepage": "https://github.com/flace/slangbot#readme"
+}
