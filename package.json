@@ -4,7 +4,8 @@
   "description": "slack bot for flace slang",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --use_strict index.js"
   },
   "repository": {
     "type": "git",
@@ -19,9 +20,24 @@
     "slackbot"
   ],
   "author": "",
+  "contributors": [
+    {
+      "name": "Oleksandr Telnov",
+      "email": "mail@telnov.com",
+      "url": "https://telnov.com/"
+    },
+    {
+      "name": "Denis Lazarenko",
+      "email": "denis.lazarenko@gmail.com",
+      "url": ""
+    }
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/flace/slangbot/issues"
   },
-  "homepage": "https://github.com/flace/slangbot#readme"
+  "homepage": "https://github.com/flace/slangbot#readme",
+  "dependencies": {
+    "slackbots": "^0.5.0"
+  }
 }
