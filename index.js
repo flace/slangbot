@@ -1,20 +1,18 @@
-let SlackBot = require('slackbots');
+const express = require('express');
+const app = express();
+const config = require('config');
 
-let bot = new SlackBot({
-	token: 'xoxb-15357276705-BHKGlH2TsaS7ajEFi6bg0F7t',
-	name: 'flaceslang'
+require('./config')(app);
+
+const port = process.env.PORT || config.port;
+
+app.listen(port, () => {
+  console.log('app start on port ' + config.port);
 });
 
-bot.on('start', () => {
-	bot.on('message', data => {
-		var params = {
-			icon_emoji: ':cat:'
-		};
-		if (data.type === 'message' && data.channel === 'C0FAZ2LKE' && data.subtype !== 'bot_message') {
-			let text = data.text;
-			let newText = text.split('').reverse().join('');
-			bot.postMessageToChannel('slang', newText, params);
-		}
-	})
+require('./routes')(app);
+app.use((req, res) => {
+  res.send(404);
 });
 
+require('./bots')(app);
