@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --use_strict index.js",
-    "lint": "node_modules/gulp/bin/gulp.js lint"
+    "lint": "node_modules/gulp/bin/gulp.js lint",
+    "deploy": "NODE_ENV=production node_modules/gulp/bin/gulp.js deploy"
   },
   "pre-commit": [
     "lint"

@@ -32,13 +32,13 @@ module.exports = app => {
 };
 
 function getTrueMessage(data) {
-  if (data.user === config.celeronId) {
-    return celeronFunction(data.text);
-  }
-  if (data.user === config.flashId) {
-    return celeronFunction(data.text);
-  }
-  return data.text;
+  // if (data.user === config.celeronId) {
+  return celeronFunction(data.text);
+  // }
+  // if (data.user === config.flashId) {
+  //   return celeronFunction(data.text);
+  // }
+  // return data.text;
 }
 
 function errorHandler(err) {
