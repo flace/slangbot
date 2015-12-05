@@ -1,15 +1,24 @@
+/**
+ *	Transform input string using SLANG rules: 
+ *		Permute a pair of consonants in each word, checking that new letter combinations have a "melodic score" above a certain threshold.
+ *		Often, just switching 1st and 2nd consonant will do the job.	
+ *
+ *	// TODO 
+ *	// 1. Concatenate output string using input string punctuation
+ *	// 2. Keep the order of uppercase-lowercase letters
+ */
 module.exports = text => {
-  var output = "";
+  var output = '';
 
   // Tokenize phrase to extract only alphabet tokens
   var alphabetRegex = /[а-я]+/gi;
-  //console.log("match:" + match);
+  //console.log('match:' + match);
   var words = text.match(alphabetRegex);
   //console.log(words);
 
   for (var wordIndex in words) {
-    word = words[wordIndex];
-    newWord = transformOneWord(word);
+    var word = words[wordIndex];
+    var newWord = transformOneWord(word);
     output += newWord + ' ';	// TODO Concatenate output string using input string punctuation
   }
   return output;
@@ -19,9 +28,9 @@ module.exports = text => {
 /**
  *	Transform one single word using SLANG rules.
  */
-var transformOneWord = function (word) {
-  wordConsonants = extractConsonants(word);
-  n = wordConsonants.length;
+function transformOneWord(word) {
+  var wordConsonants = extractConsonants(word);
+  var n = wordConsonants.length;
   // If less than 2 consonants, do nothing with the current word, just add it as is to the output.
   //		Examples: 'Не', 'оНа', 'ауЛ'.
   if (n < 2) {
@@ -42,9 +51,9 @@ var transformOneWord = function (word) {
         // For each permutation candidate, calculate the melodic score of the word obtained after permutation is performed.
         var firstConsonant = wordConsonants[firstIndex];
         var secondConsonant = wordConsonants[secondIndex];
-        //console.log("candidate permutation: " + firstConsonant.letter + secondConsonant.letter);
+        //console.log('candidate permutation: '' + firstConsonant.letter + secondConsonant.letter);
         var melodicScore = calculateMelodicScore(word, firstConsonant, secondConsonant);
-        //console.log("melodicScore:", melodicScore);
+        //console.log('melodicScore:', melodicScore);
         // if the score is above threshold, perform permutation and return the result.
         if (melodicScore > melodicScoreThreshold) {
           return performPermutation(word, firstConsonant, secondConsonant);
@@ -55,7 +64,7 @@ var transformOneWord = function (word) {
     // If all candidate permutations give low melodic scores, return input word with no changes.
     return word;
   }
-};
+}
 
 
 
@@ -64,7 +73,7 @@ var transformOneWord = function (word) {
  *	Don't just match the whole word against the regex.
  *	Instead, use object literal with letter and its index. It will be necessary for analyzing neighbour letters.
  */
-var extractConsonants = function (word) {
+function extractConsonants(word) {
   word = word.toLowerCase();
   var wordConsonants = [];
   for (var i = 0; i < word.length; i++) {
@@ -84,7 +93,7 @@ var extractConsonants = function (word) {
 /**
  *	Returns true if the letter is a consonant.
  */
-var isConsonant = function (letter) {
+function isConsonant(letter) {
   var consonantsRegex = /[бвгджзйклмнпрстфхцчшщ]/gi;
   return letter.match(consonantsRegex) != null;
 };
@@ -94,7 +103,7 @@ var isConsonant = function (letter) {
 /**
  *	Calculate the melodic score of the word obtained after permutation of two consonants is performed.
  */
-var calculateMelodicScore = function (word, firstConsonant, secondConsonant) {
+function calculateMelodicScore(word, firstConsonant, secondConsonant) {
 
 	/*	Analyze letters which are situated just after two given consonants.
 				Check if these consonants will form any 2-consonant pair after permutation.
@@ -111,7 +120,7 @@ var calculateMelodicScore = function (word, firstConsonant, secondConsonant) {
   var j = secondConsonant.letterIndex;
 
   var potentialNewWord = performPermutation(word, firstConsonant, secondConsonant).toLowerCase();
-  //console.log("potentialNewWord: " + potentialNewWord);
+  //console.log('potentialNewWord: '' + potentialNewWord);
 
   var pairsToCheckForSounding = [];
   var L = potentialNewWord.length;
@@ -139,7 +148,7 @@ var calculateMelodicScore = function (word, firstConsonant, secondConsonant) {
     for (var pairIndex in pairsToCheckForSounding) {
       var pair = pairsToCheckForSounding[pairIndex];
       var score = twoConsonantScores[pair];
-      //console.log(pair + ": score = " + score);
+      //console.log(pair + ': score = '' + score);
       scores.push(score);
     }
     // return the minimum score.
