@@ -2,7 +2,7 @@ const slackey = require('slackey');
 const config = require('config');
 
 module.exports = (app, redis) => {
-  app.get('/auth/callback', auth);
+  app.get('/slack/auth/callback', auth);
 
   function auth(req, res) {
     let code = req.query.code;
@@ -24,7 +24,7 @@ module.exports = (app, redis) => {
           console.log(err);
         }
         redis.set(response.user_id, token);
-        res.redirect(`/hello?u=${response.user}`);
+        res.redirect(`/slack/hello?u=${response.user}`);
       });
     });
   };
