@@ -16,7 +16,7 @@ let sshConfig = {
   port: 22,
   username: config.douser,
   password: config.dopass
-};
+}
 
 let gulpSSH = new GulpSSH({
   ignoreErrors: false,
@@ -26,5 +26,5 @@ let gulpSSH = new GulpSSH({
 gulp.task('deploy', () => {
   return gulpSSH
     .shell(['cd /var/www/slangbot', 'git pull origin master', 'npm install', 'pm2 restart index.js'], { filePath: 'shell.log' })
-    .pipe(gulp.dest('logs'));
-});
+    .pipe(gulp.dest('logs'))
+})

@@ -24,7 +24,7 @@ module.exports = (app, redis) => {
       </body>
       </html>
       `
-      );
+    );
   }
 
   function hello(req, res) {
@@ -46,7 +46,7 @@ module.exports = (app, redis) => {
       </body>
       </html>
       `
-      );
+    );
   }
 
   require('./auth')(app, redis);
