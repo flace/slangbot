@@ -1,9 +1,17 @@
+const config = require('config');
+
 module.exports = (app, redis) => {
   app.get('/slack', main);
   app.get('/slack/hello', hello);
 
   function main(req, res) {
-    let button = 'https://slack.com/oauth/authorize?scope=chat:write:user&team=T0429FWE3&client_id=4077540479.15566059090&redirect_uri=http://localhost:5577/auth/callback';
+    let button = `
+      https://slack.com/oauth/authorize
+      ?scope=chat:write:user
+      &team=${config.teamId}
+      &client_id=${config.clientId}
+      &redirect_uri=${config.callbackUrl}
+    `;
     res.send(
       `
       <!DOCTYPE html>
