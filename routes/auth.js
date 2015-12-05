@@ -13,19 +13,19 @@ module.exports = (app, redis) => {
       authRedirectURI: config.callbackUrl
     });
 
-    slackOAuthClient.getToken(code, (err, response) => {
+    slackOAuthClient.getToken(code, (err, resp) => {
       if (err) {
         console.log(err);
       }
-      let token = response.access_token;
+      let token = resp.access_token;
       let slackAPIClient = slackey.getAPIClient(token);
-      slackAPIClient.send('auth.test', (err, response) => {
-        if (err) {
-          console.log(err);
+      slackAPIClient.send('auth.test', (error, response) => {
+        if (error) {
+          console.log(error);
         }
         redis.set(response.user_id, token);
         res.redirect(`/slack/hello?u=${response.user}`);
       });
     });
-  };
+  }
 };
