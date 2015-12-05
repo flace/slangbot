@@ -5,13 +5,7 @@ module.exports = (app, redis) => {
   app.get('/slack/hello', hello);
 
   function main(req, res) {
-    let button = `
-      https://slack.com/oauth/authorize
-      ?scope=chat:write:user
-      &team=${config.teamId}
-      &client_id=${config.clientId}
-      &redirect_uri=${config.callbackUrl}
-    `;
+    let button = `https://slack.com/oauth/authorize?scope=chat:write:user&team=${config.teamId}&client_id=${config.clientId}&redirect_uri=${config.callbackUrl}`;
     res.send(
       `
       <!DOCTYPE html>
