@@ -1,31 +1,34 @@
 const Slackbots = require('slackbots');
 const slackey = require('slackey');
 const config = require('config');
-const botToken = process.env.botToken || config.botToken;
-const slackToken = process.env.slackToken || config.slackToken;
+const botToken = config.botToken;
 
-// const flashFunction = require('./flashFunction');
+const flashFunction = require('./flashFunction');
 const celeronFunction = require('./celeronFunction');
 
-module.exports = app => {
+module.exports = (app, redis) => {
   const bot = new Slackbots({
     token: botToken,
     name: 'flaceslang'
   });
-  const APIClient = slackey.getAPIClient(slackToken);
 
   bot.on('start', () => {
     bot.on('message', data => {
-      if (data.type === 'message' && data.subtype !== 'message_changed') {
+      if (data.type === 'message' && data.subtype !== 'message_changed' && data.channel === config.channel) {
         let updatedMessage = getTrueMessage(data).trim();
-        if (updatedMessage !== data.text) {
-          APIClient.send('chat.update', {
-            ts: data.ts,
-            token: slackToken,
-            channel: data.channel,
-            text: updatedMessage
-          }, errorHandler);
-        }
+        redis.get(data.user, (err, token) => {
+          if (!err && token) {
+            let APIClient = slackey.getAPIClient(token);
+            if (updatedMessage !== data.text) {
+              APIClient.send('chat.update', {
+                ts: data.ts,
+                token: token,
+                channel: data.channel,
+                text: updatedMessage
+              }, errorHandler);
+            }
+          }
+        });
       }
     });
   });
@@ -36,7 +39,7 @@ function getTrueMessage(data) {
     return celeronFunction(data.text);
   }
   if (data.user === config.flashId) {
-    return celeronFunction(data.text);
+    return flashFunction(data.text);
   }
   return data.text;
 }
