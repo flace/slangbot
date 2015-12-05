@@ -1,0 +1,62 @@
+Algorithms description.
+
+=================	CREATING 2-CONSONANT LOOKUP TABLE		=====================
+
+1. Load a text corpus of reference.
+
+2. Tokenize the corpus.
+
+3. For each word:
+	3.1 Extract all pairs of 2 ADJACENT consonants.
+		Example: 
+			'астронавт' contains the following pairs of 2 adjacent consonants: 'СТ', 'ТР', 'ВТ'.  
+			Update: for 3+ adjacent consonants, extract only the first 2. Thus the above example will give 'СТ', 'ВТ', but not 'ТР'.
+	3.2 Add 1 to the count of each of found pairs.
+
+4. Create dictionary of normalized float counts so that the sum of all the counts give 1.0.
+	Example:
+		- count dictionary: 'пр' = 3, 'кс' = 1, 'ст' = 10, 'вт' = 2, 'тр' = 2, 'сп' = 4. Total count = 20.
+		- normalized dictionary: 'пр' = 3/20 = 0.15, 'кс' = 1/20 = 0.05, 'ст' = 10/20 = 0.5, 'вт' = 2/20 = 0.1, 'тр' = 2/20 = 0.1, 'сп' = 4/20 = 0.2. Total score = 1.0.
+	(real dictionary will contain something around N^2 combinations, where N = number of different consonants in the alphabet)
+
+5. Copy this score table and use it from the permutation function (point 2.3.3.1 of the permutation algorithm).
+
+
+
+=================	CONSONANTS PERMUTATIONS		=====================
+
+1. Tokenize phrase to extract only alphabet tokens
+
+2. For every word, detect number of consonants.
+
+	2.1 If <2 consonants, do nothing with the current word, just add it as is to the output.
+		Examples: 'Не', 'оНа', 'ауЛ'.
+
+	2.2 Else, construct all possible 2-consonant interchange combinations. Impose ORDER.
+		Example:
+			In the word 'Александр' there are 6 consonants (encoded as 1,2,3,4,5,6 for this example), which form 15 possible permutations:
+				1-2, 1-3, 2-3, 1-4, 2-4, 3-4, 1-5, 2-5, 3-5, 4-5, 1-6, 2-6, 3-6, 4-6, 5-6 
+			This pattern defines the order in which word has to be analyzed. 
+			Often, just switching 1st and 2nd consonant will do the job. If not (the selection criteria will be described below), go to the next permutation defined by the above pattern.
+
+	2.3 Iterate over permutations. Check the melodiousness of the word obtained after permutation is performed. 
+		For doing this:
+		2.3.1 	Analyze letters which are situated just after two switched consonants. 
+				Check if these consonants will form any 2-consonant pair after permutation.
+				
+				Example 1: 'аЛеКсандр'
+					permuatation of 'Л' and 'К' gives 'аКеЛсандр', where the letter 'К' doesn't form any 2-consonant pair, while 'Л' does: pair 'Лс'.
+
+				Example 2: 'ПриВет'
+					permutation of 'П' and 'В' gives 'ВриПет', where the letter 'В' forms a 2-consonant pair 'Вр', while 'П' forms no pairs.
+
+				Example 3: 'КоМанда'
+					permutation of 'К' and 'М' gives 'МоКанда', creating no new 2-consonant pairs.
+		
+		2.3.2 	If no new 2-consonant pairs are created (like in example 3), perform the permutation and pass to the next word (next iteration of 2).
+		2.3.3 	Otherwise, for each of the created 2-consonant pairs, analyze its MELODIOUSNESS.
+			2.3.3.1 	Get the "score" of the pair in the 2-consonants lookup table.  
+						(The principle of score attribution for creating the lookup table is described in the "CREATING 2-CONSONANT LOOKUP TABLE" section)
+			2.3.3.2 	Take the minimum score.
+			2.3.3.3 	If the minimum score is lower than THRESHOLD, don't perform the permutation. Try another permutation (next iteration of 2.3)
+			2.3.3.4 	Otherwise, perform the permutation and pass to the next word (next iteration of 2).
