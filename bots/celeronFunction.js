@@ -25,7 +25,7 @@ module.exports = text => {
     let fourth = word[3];
 
     function join(w) {
-      if (first === first.toUpperCase()) {
+      if (first && first === first.toUpperCase()) {
         w[0] = w[0].toUpperCase();
       }
       return w.join('');
